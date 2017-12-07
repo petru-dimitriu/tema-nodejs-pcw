@@ -1,9 +1,18 @@
 <html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<body>
+    <div id = "smthg">
+    Hello.
+    </div>
+
+
 <script>
   const socket = io('http://localhost:8082');
+
+  socket.on('test', function (data) {
+  document.getElementById("smthg").innerHTML = data;
+});
 </script>
-<body>
-    Hello.
+
 </body>
 </html>

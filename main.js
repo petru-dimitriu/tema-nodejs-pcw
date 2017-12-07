@@ -11,4 +11,6 @@ var io = require('socket.io')(server);
 io.on('connection', function (client)
 {
     console.log('S-a conectat un client!!!');
+
+    client.emit('test','Bun venit');
 });
