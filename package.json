@@ -1,0 +1,19 @@
+{
+  "name": "tema-pcw",
+  "version": "1.0.0",
+  "description": "Tema PCW nodejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "pcw"
+  ],
+  "dependencies": {
+    "express": "^4.13.3",
+    "socket.io": "^1.3.7"
+  }
+}
