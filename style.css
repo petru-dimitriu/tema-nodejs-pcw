@@ -1,5 +1,16 @@
+*
+{
+    font-family: arial;
+}
+
+h1 {
+    border-bottom: 1px solid black;
+    font-size: 20px;
+}
+
 #status {
     float: right;
+    background: #ffff88;
 }
 
 #smthg {
@@ -22,7 +33,7 @@
 }
 
 .progress-background {
-    background-color: #11111;
+    background-color: #111111;
     height:20px;
 }
 
@@ -30,16 +41,21 @@
 	background-color: #4CAF50; /* Green */
     border: none;
     color: white;
-    padding: 16px 32px;
+    padding: 10px 10px;
     text-align: center;
     text-decoration: none;
     display: float-left;
     font-size: 16px;
 	width: 30px;
-    margin: 4px 2px;
+    margin: 4px 4px;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     cursor: pointer;
+}
+
+a
+{
+    text-decoration:none;
 }
 
 .button:hover {
