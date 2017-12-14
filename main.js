@@ -4,6 +4,7 @@ var app = express();
 
 var gameStatus = "WAITING";
 var loggedOnPlayers = 0;
+var winners = 0;
 
 var server = app.listen(8082, function ()
 {
@@ -29,7 +30,7 @@ io.on('connection', function (client)
     // elimina clientul din lista cand se conecteaza
     client.on('disconnect', function ()
     {
-        console.log('S-a deconectat un client!');
+       
         indexClient = clientList.indexOf(client);
         // clientul avea setat numele player-ului deci era logat => scadem numarul de player-i logati
         if (client.playerName !== null)
@@ -43,7 +44,7 @@ io.on('connection', function (client)
 
     client.on('enter', function (name)
     {
-        console.log(name + ' has entered. ');
+        
         client.playerName = name;
         loggedOnPlayers++;
         client.emit('entered');
@@ -56,7 +57,17 @@ io.on('connection', function (client)
 
     client.on('updateStatus', function(percent) {
         client.percent = percent;
-        console.log(client.playerName + ' ' + percent);
+       
+    });
+
+    client.on('winner', function() {
+        broadcastWinner(client.playerName);
+        winners++;
+        if (winners == clientList.length) {
+            broadcastEnd();
+            disconnectFromAllClients();
+            gameStatus = "WAITING";
+        }
     });
 
     setInterval(broadcastStatus, 1000);
@@ -98,6 +109,14 @@ function broadcastReady()
     }
 }
 
+function broadcastEnd()
+{
+    for (var i = 0; i < clientList.length ; i++)
+    {
+        clientList[i].emit('end');
+    }
+}
+
 function broadcastStartGame()
 {
     var text = "Lorem ipsum dolor";
@@ -105,5 +124,22 @@ function broadcastStartGame()
     for (var i = 0; i < clientList.length ; i++)
     {
         clientList[i].emit('startGame',text);
+    }
+}
+
+function broadcastWinner(winnerName)
+{
+    for (var i = 0; i < clientList.length ; i++)
+    {
+        clientList[i].emit('getWinner',winnerName);
+    }
+}
+
+function disconnectFromAllClients()
+{
+    for (var i = 0; i < clientList.length; i ++)
+    {
+        clientList[i].playerName = undefined;
+        clientList[i].percent = undefined;
     }
 }
