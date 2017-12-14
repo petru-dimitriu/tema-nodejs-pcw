@@ -41,6 +41,8 @@
     </div>
 
     <script>
+      numberOfWinners = 0;
+
       text = "Lorem ipsum dolor";
 
       loginHTML = `
@@ -55,6 +57,7 @@
     <p> The game will start in a few moments. </p>
     <div id = 'textToWrite'> </div>
     <textarea id = 'writtenText' onkeyup='update()'></textarea>
+    <div id = "winners"></div>
 `;
 
     waitingHTML = `
@@ -106,6 +109,18 @@
   document.getElementById('title').innerHTML = "Type now!";
 });
 
+  socket.on('getWinner', function(winnerName) {
+    numberOfWinners ++;
+    if (document.getElementById('winners').innerHTML == '')
+        document.getElementById('winners').innerHTML = "Winners: <br>";
+    document.getElementById('winners').innerHTML += numberOfWinners + ". " + winnerName + "<br>";
+});
+
+  socket.on('end', function () {
+    document.getElementById("title").innerHTML = 'Contest has ended. Congratulation to everyone!';
+    document.getElementById("textToWrite").style.display="none";
+});
+
   function update()
   {
     var textToWrite = document.getElementById("textToWrite").innerHTML;
@@ -113,6 +128,11 @@
     var writtenText = document.getElementById("writtenText").value;
     var remainingText = textToWrite.replace(writtenText,'');
     var remainingTextLength = remainingText.length;
+    if (remainingTextLength == 0)
+    {
+        socket.emit('winner');
+        document.getElementById("writtenText").style.display="none";
+    }
     var writtenTextLength = textToWriteLength - remainingTextLength;
     var percent = Math.round(writtenTextLength / textToWriteLength * 100);
     if (percent != 0)
