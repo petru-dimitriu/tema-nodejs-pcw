@@ -1,34 +1,9 @@
 <html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-<style>
-#status {
-    float: right;
-}
 
-#smthg {
-    float: left;
-    width: 80%;
-}
-
-#textToWrite, #writtenText {
-    width: 100%;
-    height: 200px;
-}
-
-#textToWrite {
-    border: solid black 5px;
-}
-
-.progress {
-    background-color: red;
-    height: 20px;
-}
-
-.progress-background {
-    background-color: #11111;
-    height:20px;
-}
-</style>
 <body>
     <div id = "status">
         <div id = "statusText"> </div>
