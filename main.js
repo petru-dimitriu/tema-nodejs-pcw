@@ -50,11 +50,16 @@ io.on('connection', function (client)
         if (loggedOnPlayers != 0 && loggedOnPlayers == clientList.length)
         {
             broadcastReady();
-            setTimeout(broadcastStartGame,3000);
+            setTimeout(broadcastStartGame,1000);
         }
     });
 
-    setInterval(broadcastStatus, 3000);
+    client.on('updateStatus', function(percent) {
+        client.percent = percent;
+        console.log(client.playerName + ' ' + percent);
+    });
+
+    setInterval(broadcastStatus, 1000);
 });
 
 // trimite catre toti clientii starea curenta a jocului
@@ -65,8 +70,12 @@ function broadcastStatus()
 
     for (var i = 0; i < clientList.length ; i++)
     {
-        if (clientList[i].playerName !== undefined)
-            playerNameList.push(clientList[i].playerName);
+        if (clientList[i].playerName !== undefined) {
+            player = {};
+            player.name = clientList[i].playerName;
+            player.percent = clientList[i].percent;
+            playerNameList.push(player);
+        }
     }
     
     var status = 

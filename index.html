@@ -18,6 +18,16 @@
 #textToWrite {
     border: solid black 5px;
 }
+
+.progress {
+    background-color: red;
+    height: 20px;
+}
+
+.progress-background {
+    background-color: #11111;
+    height:20px;
+}
 </style>
 <body>
     <div id = "status">
@@ -44,7 +54,7 @@
     <h1 id ='title'> Get ready to type! </h1>
     <p> The game will start in a few moments. </p>
     <div id = 'textToWrite'> </div>
-    <textarea id = 'writtenText'> </textarea>
+    <textarea id = 'writtenText' onkeyup='update()'></textarea>
 `;
 
     waitingHTML = `
@@ -73,7 +83,12 @@
   
   document.getElementById("playerList").innerHTML = "";
   for (var i = 0; i < data.playerNameList.length; i++) {
-    document.getElementById("playerList").innerHTML += data.playerNameList[i] + "<br>";
+    document.getElementById("playerList").innerHTML += data.playerNameList[i].name + "<br>";
+    if (data.playerNameList[i].percent !== undefined) // suntem in timpul jocului si a avem procentaj
+    {
+        document.getElementById("playerList").innerHTML += "<div class = 'progress-background'> <div class = 'progress' style='width:" +
+            data.playerNameList[i].percent + "%'> </div> </div>";
+    }
   }
 
 });
@@ -90,6 +105,19 @@
   document.getElementById("textToWrite").innerHTML = text;
   document.getElementById('title').innerHTML = "Type now!";
 });
+
+  function update()
+  {
+    var textToWrite = document.getElementById("textToWrite").innerHTML;
+    var textToWriteLength = textToWrite.length;
+    var writtenText = document.getElementById("writtenText").value;
+    var remainingText = textToWrite.replace(writtenText,'');
+    var remainingTextLength = remainingText.length;
+    var writtenTextLength = textToWriteLength - remainingTextLength;
+    var percent = Math.round(writtenTextLength / textToWriteLength * 100);
+    if (percent != 0)
+        socket.emit('updateStatus',percent);
+  }
 
 
   function enterGame() {
